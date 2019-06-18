@@ -33,6 +33,7 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         text_data_json = json.loads(text_data)
         state = text_data_json['state']
         await self.update_state(state)
+        # await self.send(text_data=state)
 
     async def device_toggle(self, event):
         """Handler for device.viewsets.toggle endpoint"""
