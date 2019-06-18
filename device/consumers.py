@@ -1,77 +1,37 @@
 import json
 
+from channels.db import database_sync_to_async
 from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 
 from .models import Device
 
-class MyConsumer(AsyncWebsocketConsumer):
+class DeviceConsumer(AsyncWebsocketConsumer):
     groups = ["broadcast"]
 
-    async def connect(self):
-        # Called on connection.
-        # To accept the connection call:
-        await self.accept()
+    @database_sync_to_async
+    def get_device(self, id):
+        return Device.objects.get(pk=id)
 
-    async def receive(self, text_data=None, bytes_data=None):
-        # Called with either text_data or bytes_data for each frame
-        # You can call:
-        await self.send(text_data="Hello world!")
-
-    async def disconnect(self, close_code):
-        # Called when the socket closes
-        # Or add a custom WebSocket error code!
-        await self.close(code=4123)
-
-class DeviceConsumer(AsyncWebsocketConsumer):
-    """
-    """
+    @database_sync_to_async
+    def update_device(self, state):
+        self.device.state = state
+        self.device.save()
 
     async def connect(self):
         self.device_id = self.scope['url_route']['kwargs'].get('id')  # pega o id da delivery
-        self.device = Device.objects.get(pk=self.device_id)
-        # self.user = self.scope["user"].username  # pega o usuário dono do ws
-        # self.delivery = Delivery.objects.get(pk=self.delivery_id)  # recupera delivery do banco
-        self.room_group_name = "device_" + self.device_id
-
-        await self.channel_layer.group_add(
-            self.room_group_name,
-            self.channel_name
-        )
-
+        self.device = await self.get_device(id=self.device_id)
+        await self.channel_layer.group_add("device", self.channel_name)
         await self.accept()
 
-    async def disconnect(self):
-        await self.channel_layer.group_discard(
-            self.room_group_name,
-            self.channel_name
-        )
-        await self.close()
-
-    # Receive from websocket
-    async def receive(self, text_data):
+    async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
-        status = text_data_json['status']
+        state = text_data_json['state']
+        await self.update_device(state)
+        await self.send(text_data=self.device.state)
 
-        # Send message to room group
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'device.status',
-                'status': device.status,
-                'name': device.name,
-            }
-        )
+    async def device_toggle(self, event):
+        """Handler for device.viewsets toggle endpoint"""
+        await self.send(text_data=json.dumps({'state': event['state'], 'device': event['device']}))
 
-    # Receive message from room group
-    async def device_status(self, event):
-        status = event['status']
-        name = event['name']
-
-        # Send message to WebSocket
-        await self.send(text_data=json.dumps({
-            'message': status,
-            'from': name
-        }))
-
-        if status == 6:  # entrega cancelada
-            await self.disconnect()
+    async def disconnect(self, close_code):
+        await self.close(code=4123)
