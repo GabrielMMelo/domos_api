@@ -9,6 +9,7 @@ class Device(models.Model):
     type = models.CharField(choices=DEVICE_TYPE, max_length=1)
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     state = models.BooleanField(default=False)
+    channel = models.CharField(max_length=200, blank=True)
 
     def __str__(self):
-        return self.name
+        return '{} - {}'.format(self.name, self.place)
