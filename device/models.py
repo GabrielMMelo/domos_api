@@ -10,6 +10,7 @@ class Device(models.Model):
     place = models.ForeignKey(Place, on_delete=models.CASCADE)
     state = models.BooleanField(default=False)
     channel = models.CharField(max_length=200, blank=True)
+    mac = models.CharField(max_length=17, blank=True, unique=True)
 
     def __str__(self):
         return '{} - {}'.format(self.name, self.place)
