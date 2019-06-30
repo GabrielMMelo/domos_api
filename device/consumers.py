@@ -11,10 +11,12 @@ class DeviceConsumer(AsyncWebsocketConsumer):
     def get_device(self, id):
         return Device.objects.get(pk=id)
 
+    """
     @database_sync_to_async
     def set_mac(self, mac):
         self.device.mac = mac
         self.device.save()
+    """
 
     @database_sync_to_async
     def update_state(self, state):
@@ -44,11 +46,13 @@ class DeviceConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
+        """
         try:
             mac = text_data_json['mac']
             await self.set_mac(mac)
         except KeyError:
             pass
+        """
 
         try:
             state = text_data_json['state']

@@ -1,6 +1,5 @@
 DEVICE_TYPE = (
-    ('L', 'Light'),
-    ('G', 'Generic on/off'),
-    ('T', 'Tv remote control'),
-    ('L', 'Light'),
+    ('Light', 'Light'),
+    ('Generic', 'Generic (on/off)'),
+    ('Tv', 'Tv remote control'),
 )
