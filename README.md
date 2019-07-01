@@ -1,4 +1,4 @@
-![Logo of the project](https://raw.githubusercontent.com/jehna/readme-best-practices/master/sample-logo.png)
+![PyIoT's logo](https://github.com/GabrielMMelo/pyiot-api/blob/master/docs/logo.png)
 
 # PyIoT
 > Your home controller powered by python
