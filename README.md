@@ -35,7 +35,7 @@ pip install -r requirements.txt
 #### Run the application
 ```shell
 python manage.py runserver 0.0.0.0:8000
-``**
+```
 
 > You'll also need to follow the steps described in the two anothers repos as well
 
