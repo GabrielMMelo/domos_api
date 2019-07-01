@@ -1,7 +1,8 @@
-![PyIoT's logo](https://github.com/GabrielMMelo/pyiot-api/blob/master/docs/logo.png)
+
+<img align="right" width="200" height="200" src="https://github.com/GabrielMMelo/pyiot-api/blob/master/docs/logo.png" alt="PyIoT's logo">
 
 # PyIoT
-> Your home controller powered by python
+> Your home controller _powered by python_
 
 This project was splitted out in 3 repositories:
 - [Api application](https://github.com/GabrielMMelo/pyiot-api.git) - Django, DRF, Django Channels, PostgreSQL & Redis 
