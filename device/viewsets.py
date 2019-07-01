@@ -15,7 +15,7 @@ from .serializers import DeviceSerializer
 class DeviceViewSet(ModelViewSet):
     serializer_class = DeviceSerializer
 
-    #    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser]  # temporary turned 0ff
 
     def get_queryset(self):
         return Device.objects.all()
