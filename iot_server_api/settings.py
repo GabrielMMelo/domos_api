@@ -24,7 +24,7 @@ SECRET_KEY = 's5&k7miug4oxj2@vjw%i3h7f1trt87kiq!7#s2^wbp$*i2xmf0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = '*'
 
 # Application definition
 
@@ -80,9 +80,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'iot_server',
-        'USER': 'melo',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'USER': 'pi',
+        'PASSWORD': '@rpi03OTM',
+        'HOST': '0.0.0.0',
         'PORT': '5432',
     }
 }
@@ -130,6 +130,7 @@ STATIC_URL = '/static/'
 # channels
 # -----------------------------------------------------------------------------
 ASGI_APPLICATION = "iot_server_api.routing.application"
+#ASGI_APPLICATION = "routing.application"
 
 CHANNEL_LAYERS = {
     'default': {
