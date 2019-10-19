@@ -9,6 +9,7 @@ from place.viewsets import PlaceViewSet
 router = routers.DefaultRouter()
 router.register('device', DeviceViewSet, base_name='Device')
 router.register('place', PlaceViewSet, base_name='Place')
+
 """
 rest_auth = [
     path('login', LoginViewAdapter.as_view(), name="user-login"),
@@ -24,10 +25,14 @@ rest_auth = [
          name='rest_password_reset_confirm'),
 ]
 """
+auth = [
+    path('', include('rest_auth.urls')),
+    path('registration/', include('rest_auth.registration.urls'))
+]
 
 api_v1 = [
     path('', include((router.urls, 'api'))),
-    path('auth/', include('rest_auth.urls'))
+    path('auth/', include(auth))
 ]
 
 urlpatterns = [
