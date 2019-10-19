@@ -20,6 +20,20 @@ class DeviceViewSet(ModelViewSet):
     def get_queryset(self):
         return Device.objects.all()
 
+    def create(self, request):
+        user = request.user
+        data = request.data
+
+        print(user, data["mac"])
+        try:
+            device = Device.objects.get(owner=user, mac=data["mac"])
+            return HttpResponse(json.dumps({"id": device.id}))
+        except Device.DoesNotExist:
+            data['owner'] = user
+            device = Device(**data)
+            device.save()
+            return HttpResponse(json.dumps({'id': device.id}))
+
     @action(methods=['get'], detail=True, url_path='toggle', url_name='toggle')
     def toggle(self, request, pk=None):
         device = Device.objects.get(pk=pk)
