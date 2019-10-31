@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_auth.registration',
     'channels',
-    'place',
+    'activity',
     'device',
+    'place',
 ]
 
 MIDDLEWARE = [
