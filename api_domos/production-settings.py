@@ -15,7 +15,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = '*'
 
-SITE_ID = 1
+SITE_ID = 1  # domos.icu
 
 # Application definition
 
@@ -57,7 +57,7 @@ ROOT_URLCONF = 'api_domos.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,6 +128,30 @@ CHANNEL_LAYERS = {
     },
 }
 
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_USE_TLS = True
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = 'info@domos.icu'
+
+# ALLAUTH
+# -----------------------------------------------------------------------------
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+
 # REST framework
 # -----------------------------------------------------------------------------
 REST_FRAMEWORK = {
@@ -135,7 +159,11 @@ REST_FRAMEWORK = {
     ('rest_framework.authentication.TokenAuthentication', )
 }
 
-# SECURITY
+REST_AUTH_REGISTER_SERIALIZERS = {
+        'REGISTER_SERIALIZER': 'core.serializers.RegisterSerializer',
+}
+
+# CORS
 # -----------------------------------------------------------------------------
 CORS_ORIGIN_ALLOW_ALL = True
 CSRF_COOKIE_SECURE = True
