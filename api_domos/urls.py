@@ -1,10 +1,15 @@
 from rest_framework import routers
 
+from rest_auth.registration.views import VerifyEmailView, RegisterView
+from allauth.account.views import confirm_email
+
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from device.viewsets import DeviceViewSet
 from place.viewsets import PlaceViewSet
+
+from core.views import ConfirmEmailView
 
 router = routers.DefaultRouter()
 router.register('device', DeviceViewSet, base_name='Device')
@@ -27,7 +32,8 @@ rest_auth = [
 """
 auth = [
     path('', include('rest_auth.urls')),
-    path('registration/', include('rest_auth.registration.urls'))
+    path('registration/', include('rest_auth.registration.urls')),
+    path(r'^registration/account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(), name='account_confirm_email'),
 ]
 
 api_v1 = [
@@ -38,4 +44,7 @@ api_v1 = [
 urlpatterns = [
     path('api/v1/', include(api_v1)),
     path('admin/', admin.site.urls),
+    #TODO: change the route in email template
+    re_path(r'^account-confirm-email/', VerifyEmailView.as_view(),
+        name='account_email_verification_sent'),
 ]
