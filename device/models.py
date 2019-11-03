@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 from .choices import DEVICE_TYPE
 from place.models import Place
+import activity  # import deadlock with activity.models.Activity
 
 
 class Device(models.Model):
@@ -16,3 +17,8 @@ class Device(models.Model):
 
     def __str__(self):
         return '{} - {}'.format(self.name, self.mac)
+
+    def get_updated_at(self):
+        """ Get timestamp from last time state was updated """
+        return activity.models.Activity.objects.filter(device=self.pk).last().created_at
+
