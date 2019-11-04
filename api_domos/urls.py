@@ -8,12 +8,14 @@ from django.urls import include, path, re_path
 
 from device.viewsets import DeviceViewSet
 from place.viewsets import PlaceViewSet
+from activity.viewsets import ActivityViewSet
 
 from core.views import ConfirmEmailView
 
 router = routers.DefaultRouter()
 router.register('device', DeviceViewSet, base_name='Device')
 router.register('place', PlaceViewSet, base_name='Place')
+router.register('activity', ActivityViewSet, base_name='Activity')
 
 """
 rest_auth = [
