@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -14,11 +15,15 @@ class Device(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     channel = models.CharField(max_length=200, blank=True)
     mac = models.CharField(max_length=17, unique=True)
+    node_connected = models.BooleanField(default=False)
 
     def __str__(self):
         return '{} - {}'.format(self.name, self.mac)
 
     def get_updated_at(self):
         """ Get timestamp from last time state was updated """
-        return activity.models.Activity.objects.filter(device=self.pk).last().created_at
+        try:
+            return activity.models.Activity.objects.filter(device=self.pk).last().created_at
+        except:
+            return datetime.datetime.now()
 
