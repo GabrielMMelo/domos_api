@@ -134,6 +134,10 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({'state': event['state']}))
 
     async def disconnect(self, close_code):
+        if self.is_node:
+            print("NODE DESCONECTADO")
+            await self.update_node_connected(False)
+
         await self.channel_layer.group_send(self.device_room, {
                 'type': 'node_connected_broadcast',
                 'node_connected': False
@@ -141,7 +145,4 @@ class DeviceConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.device_room,
                                                self.channel_name)
 
-        if self.is_node:
-            print("NODE DESCONECTADO")
-            self.update_node_connected(False)
         await self.close(code=1)
