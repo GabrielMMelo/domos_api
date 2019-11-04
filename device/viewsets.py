@@ -24,7 +24,6 @@ class DeviceViewSet(ModelViewSet):
         user = request.user
         data = request.data
 
-        print(user, data["mac"])
         try:
             device = Device.objects.get(owner=user, mac=data["mac"])
             return HttpResponse(json.dumps({"id": device.id}))
